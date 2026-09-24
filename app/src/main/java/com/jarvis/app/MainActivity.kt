@@ -1,5 +1,14 @@
 package com.jarvis.app
 
+import androidx.compose.foundation.layout.* androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+
 import android.Manifest
 import android.app.Application
 import android.content.Intent
@@ -185,12 +194,17 @@ class MainActivity : ComponentActivity() {
     private val vm: JarvisVm by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 7)
-        }
-        setContent { JarvisRoot(vm) }
-    }
+
+// 1. Comment out this line so bottom menu buttons become clickable:
+// enableEdgeToEdge()
+
+if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 7)
+}
+
+// 2. Move setContent OUTSIDE the if-block so the app always loads:
+setContent { JarvisRoot(vm) }
+
 }
 
 @Composable
@@ -462,3 +476,86 @@ fun listen(ctx: android.content.Context, on: (String) -> Unit) {
     })
     sr.startListening(i)
 }
+data class ChatMessage(val text: String, val isUser: Boolean)
+
+@Composable
+fun ChatScreen(
+    modifier: Modifier = Modifier
+) {
+    var inputText by remember { mutableStateOf("") }
+    val messages = remember { mutableStateListOf<ChatMessage>() }
+    val scope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .padding(16.dp)
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            items(messages) { msg ->
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (msg.isUser) 
+                            MaterialTheme.colorScheme.primaryContainer 
+                        else 
+                            MaterialTheme.colorScheme.surfaceVariant
+                    ),
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .fillMaxWidth(0.8f)
+                ) {
+                    Text(
+                        text = msg.text,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+        }
+
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = inputText,
+                onValueChange = { inputText = it },
+                placeholder = { Text("Ask JARVIS...") },
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                onClick = {
+                    if (inputText.isNotBlank() && !isLoading) {
+                        val prompt = inputText
+                        messages.add(ChatMessage(prompt, isUser = true))
+                        inputText = ""
+                        isLoading = true
+
+                        scope.launch {
+                            val reply = "JARVIS: Processing your prompt offline..."
+                            messages.add(ChatMessage(reply, isUser = false))
+                            isLoading = false
+                        }
+                    }
+                }
+            ) {
+                Text("Send")
+            }
+        }
+    }
+}
+
