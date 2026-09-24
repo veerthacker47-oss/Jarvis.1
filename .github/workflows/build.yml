@@ -17,13 +17,10 @@ jobs:
 
       - uses: android-actions/setup-android@v4
 
-      - name: Generate Fresh Gradle Wrapper
+      - name: Download Official Gradle Wrapper JAR
         run: |
-          mkdir /tmp/wrapper_gen && cd /tmp/wrapper_gen
-          gradle wrapper
-          cd $GITHUB_WORKSPACE
           mkdir -p gradle/wrapper
-          cp /tmp/wrapper_gen/gradle/wrapper/gradle-wrapper.jar gradle/wrapper/
+          curl -sSL -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.5.0/gradle/wrapper/gradle-wrapper.jar
 
       - run: chmod +x gradlew
 
