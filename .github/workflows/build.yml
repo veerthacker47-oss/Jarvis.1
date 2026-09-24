@@ -17,6 +17,15 @@ jobs:
 
       - uses: android-actions/setup-android@v4
 
+      - name: Generate Fresh Gradle Wrapper
+        run: |
+          mkdir temp_wrapper && cd temp_wrapper
+          gradle wrapper
+          cd ..
+          mkdir -p gradle/wrapper
+          cp temp_wrapper/gradle/wrapper/gradle-wrapper.jar gradle/wrapper/
+          rm -rf temp_wrapper
+
       - run: chmod +x gradlew
 
       - run: ./gradlew assembleDebug --no-daemon
