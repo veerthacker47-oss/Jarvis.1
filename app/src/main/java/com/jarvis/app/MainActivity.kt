@@ -548,4 +548,5 @@ fun ChatScreen(
         }
     }
 }
+}
 
