@@ -17,9 +17,18 @@ jobs:
 
       - uses: android-actions/setup-android@v4
 
-      - uses: gradle/actions/setup-gradle@v3
+      - name: Generate Clean Gradle Wrapper
+        run: |
+          mkdir -p /tmp/wrapper_gen
+          cd /tmp/wrapper_gen
+          touch settings.gradle
+          gradle wrapper
+          mkdir -p $GITHUB_WORKSPACE/gradle/wrapper
+          cp gradle/wrapper/gradle-wrapper.jar $GITHUB_WORKSPACE/gradle/wrapper/gradle-wrapper.jar
 
-      - run: gradle assembleDebug --no-daemon
+      - run: chmod +x gradlew
+
+      - run: ./gradlew assembleDebug --no-daemon
 
       - uses: actions/upload-artifact@v4
         with:
