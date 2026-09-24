@@ -1,0 +1,13 @@
+Upload this ZIP to Maywada Labs.
+
+The project root IS the zip root.
+You should see settings.gradle.kts and the app folder.
+
+Click Build APK / run:
+  assembleDebug
+
+APK:
+  app/build/outputs/apk/debug/app-debug.apk
+
+Needs JDK 17 + Android SDK 34 + internet.
+This is an Android app, not a website.
