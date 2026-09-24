@@ -17,14 +17,9 @@ jobs:
 
       - uses: android-actions/setup-android@v4
 
-      - name: Download Official Gradle Wrapper JAR
-        run: |
-          mkdir -p gradle/wrapper
-          curl -sSL -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.5.0/gradle/wrapper/gradle-wrapper.jar
+      - uses: gradle/actions/setup-gradle@v3
 
-      - run: chmod +x gradlew
-
-      - run: ./gradlew assembleDebug --no-daemon
+      - run: gradle assembleDebug --no-daemon
 
       - uses: actions/upload-artifact@v4
         with:
