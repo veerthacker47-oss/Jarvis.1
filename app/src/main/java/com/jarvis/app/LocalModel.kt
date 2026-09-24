@@ -5,7 +5,12 @@ import android.net.Uri
 import java.io.File
 
 class LocalModel(private val context: Context) {
-    val modelFile: File get() = File(context.filesDir, "jarvis_models/qwen-0.5b.gguf")
+    val modelFile: File get() {
+    val dir = File(context.filesDir, "jarvis_models")
+    val foundFile = dir.listFiles()?.firstOrNull { it.name.endsWith(".gguf", ignoreCase = true) }
+    return foundFile ?: File(dir, "default.gguf")
+}
+
     val installed: Boolean get() = modelFile.exists() && modelFile.length() > 64
 
     fun importUri(uri: Uri): String {
