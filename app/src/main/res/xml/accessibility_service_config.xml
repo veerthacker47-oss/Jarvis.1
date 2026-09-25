@@ -6,5 +6,3 @@
     android:canPerformGestures="true"
     android:canRetrieveWindowContent="true"
     android:description="@string/accessibility_service_description" />
-
-
