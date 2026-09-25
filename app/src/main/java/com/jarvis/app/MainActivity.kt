@@ -378,14 +378,24 @@ fun JarvisRoot(vm: JarvisVm) {
 
 @Composable fun ModelPage(vm: JarvisVm, back: () -> Unit) {
     var status by remember { mutableStateOf(if (vm.modelReady) "A GGUF is already installed." else "No model yet. Import the .gguf from Downloads.") }
-    val pick = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        if (uri != null) vm.importModel(uri) { status = it }
-    }
+    val pick =
+rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+
+        if (uri != null) {
+    LocalContext.current.contentResolver.takePersistableUriPermission(
+        uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION
+    )
+    vm.importModel(uri) { status = it }
+}
+
     Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("‹  AI Model", color = TextP, fontWeight = FontWeight.Bold, modifier = Modifier.clickable { back() })
         Text("Import your GGUF so JARVIS can think on this phone.", color = TextS)
         Text(status, color = TextP)
-        Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(Cyan).clickable { pick.launch("*/*") }.padding(16.dp)) {
+        Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(Cyan).clickable 
+pick.launch(arrayOf("*/*"))
+ }.padding(16.dp)) {
             Text("Import .gguf file", color = Bg, fontWeight = FontWeight.Bold)
         }
         Text("Use a small file (Qwen 0.5B Q4). After import, chat uses the model.", color = TextT, fontSize = 12.sp)
