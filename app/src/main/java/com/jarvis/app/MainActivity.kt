@@ -1,5 +1,6 @@
 package com.jarvis.app
 
+import androidx.compose.ui.platform.LocalContext
 import android.Manifest
 import android.app.Application
 import android.content.Intent
