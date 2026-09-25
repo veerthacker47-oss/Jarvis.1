@@ -397,7 +397,7 @@ fun JarvisRoot(vm: JarvisVm) {
     var apps by remember { mutableStateOf(vm.listedApps()) }
     Column(Modifier.fillMaxSize().padding(16.dp)) {
         Text("‹  Connect", color = TextP, fontWeight = FontWeight.Bold, modifier = Modifier.clickable { back() })
-        Text("Link apps, then say open YouTube.", color = TextS, fontSize = 12.sp)
+        Text("System integrations and connected services.", color = TextS, fontSize = 12.sp)
         BasicTextField(q, { q = it }, textStyle = TextStyle(color = TextP), modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).background(Surface, RoundedCornerShape(20.dp)).padding(12.dp))
         LazyColumn {
             items(apps.filter { q.isBlank() || it.label.contains(q, true) }, key = { it.pkg }) { a ->
