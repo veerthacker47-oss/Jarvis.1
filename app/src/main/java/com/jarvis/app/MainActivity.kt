@@ -377,18 +377,39 @@ fun JarvisRoot(vm: JarvisVm) {
 }
 
 @Composable fun ModelPage(vm: JarvisVm, back: () -> Unit) {
-val context = LocalContext.current
-    var status by remember { mutableStateOf(if (vm.modelReady) "A GGUF is already installed." else "No model yet. Import the .gguf from Downloads.") }
-    val pick =
-rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+    val context = LocalContext.current
+    var status by remember { 
+        mutableStateOf(
+            if (vm.modelReady) "A GGUF is already installed." 
+            else "No model yet. Import the .gguf from Downloads."
+        ) 
+    }
 
+    val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) {
-    context.contentResolver.takePersistableUriPermission(
-        uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION
-    )
-    vm.importModel(uri) { status = it }
+            context.contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+            vm.importModel(uri) { status = it }
+        }
+    }
+
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Model Configuration", style = MaterialTheme.typography.headlineMedium)
+        Spacer(Modifier.height(16.dp))
+        Text(status)
+        Spacer(Modifier.height(16.dp))
+        Button(onClick = { pick.launch(arrayOf("*/*")) }) {
+            Text("Select .gguf File")
+        }
+        Spacer(Modifier.height(16.dp))
+        Button(onClick = back) {
+            Text("Back")
+        }
+    }
 }
+
 
     Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("‹  AI Model", color = TextP, fontWeight = FontWeight.Bold, modifier = Modifier.clickable { back() })
