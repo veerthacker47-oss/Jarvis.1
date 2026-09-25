@@ -531,6 +531,8 @@ fun ChatScreen(
                 onClick = {
                     if (inputText.isNotBlank() && !isLoading) {
                         val prompt = inputText
+AutomationManager(context).executeCommand(prompt)
+
                         messages.add(ChatMessage(prompt, isUser = true))
                         inputText = ""
                         isLoading = true
