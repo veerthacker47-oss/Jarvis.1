@@ -1,5 +1,6 @@
 package com.jarvis.app
 
+import com.jarvis.app.AutomationManager
 import android.Manifest
 import android.app.Application
 import android.content.Intent
