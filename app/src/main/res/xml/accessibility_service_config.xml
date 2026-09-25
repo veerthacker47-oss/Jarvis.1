@@ -5,4 +5,5 @@
     android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows"
     android:canPerformGestures="true"
     android:canRetrieveWindowContent="true"
-    android:description="@string/app_name" />
+    android:description="JARVIS Accessibility Service"/>
+
