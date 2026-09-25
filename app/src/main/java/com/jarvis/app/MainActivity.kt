@@ -377,12 +377,13 @@ fun JarvisRoot(vm: JarvisVm) {
 }
 
 @Composable fun ModelPage(vm: JarvisVm, back: () -> Unit) {
+val context = LocalContext.current
     var status by remember { mutableStateOf(if (vm.modelReady) "A GGUF is already installed." else "No model yet. Import the .gguf from Downloads.") }
     val pick =
 rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
 
         if (uri != null) {
-    LocalContext.current.contentResolver.takePersistableUriPermission(
+    context.contentResolver.takePersistableUriPermission(
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION
     )
