@@ -163,20 +163,18 @@ class JarvisVm(app: Application) : AndroidViewModel(app) {
 
 class MainActivity : ComponentActivity() {
     private val vm: JarvisVm by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-// 1. Comment out this line so bottom menu buttons become clickable:
-// enableEdgeToEdge()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 1)
+        }
 
-if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 7)
+        setContent { JarvisRoot(vm) }
+    }
 }
 
-// 2. Move setContent OUTSIDE the if-block so the app always loads:
-setContent { JarvisRoot(vm) }
-
-}
 
 @Composable
 fun JarvisRoot(vm: JarvisVm) {
