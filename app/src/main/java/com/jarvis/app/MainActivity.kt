@@ -392,20 +392,6 @@ fun JarvisRoot(vm: JarvisVm) {
 }
 
 
-
-    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("‹  AI Model", color = TextP, fontWeight = FontWeight.Bold, modifier = Modifier.clickable { back() })
-        Text("Import your GGUF so JARVIS can think on this phone.", color = TextS)
-        Text(status, color = TextP)
-        Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(Cyan).clickable 
-pick.launch(arrayOf("*/*"))
- }.padding(16.dp)) {
-            Text("Import .gguf file", color = Bg, fontWeight = FontWeight.Bold)
-        }
-        Text("Use a small file (Qwen 0.5B Q4). After import, chat uses the model.", color = TextT, fontSize = 12.sp)
-    }
-}
-
 @Composable fun ConnectPage(vm: JarvisVm, back: () -> Unit) {
     var q by remember { mutableStateOf("") }
     var apps by remember { mutableStateOf(vm.listedApps()) }
