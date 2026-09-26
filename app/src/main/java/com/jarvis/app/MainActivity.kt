@@ -363,7 +363,8 @@ fun JarvisRoot(vm: JarvisVm) {
     }
 }
 
-@Composable fun ModelPage(vm: JarvisVm, back: () -> Unit) {
+@Composable
+fun ModelPage(vm: JarvisVm, back: () -> Unit) {
     val context = LocalContext.current
     var status by remember {
         mutableStateOf(
@@ -398,27 +399,68 @@ fun JarvisRoot(vm: JarvisVm) {
 }
 
 
-@Composable fun ConnectPage(vm: JarvisVm, back: () -> Unit) {
+
+@Composable
+fun ConnectPage(vm: JarvisVm, back: () -> Unit) {
     var q by remember { mutableStateOf("") }
     var apps by remember { mutableStateOf(vm.listedApps()) }
+
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text("‹  Connect", color = TextP, fontWeight = FontWeight.Bold, modifier = Modifier.clickable { back() })
-        Text("System integrations and connected services.", color = TextS, fontSize = 12.sp)
-        BasicTextField(q, { q = it }, textStyle = TextStyle(color = TextP), modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).background(Surface, RoundedCornerShape(20.dp)).padding(12.dp))
+        Text(
+            "< Connect",
+            color = TextP,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.clickable { back() }
+        )
+        Text(
+            "System integrations and connected services.",
+            color = TextS,
+            fontSize = 12.sp
+        )
+        BasicTextField(
+            value = q,
+            onValueChange = { q = it },
+            textStyle = TextStyle(color = TextP),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .background(Surface, RoundedCornerShape(20.dp))
+                .padding(12.dp)
+        )
         LazyColumn {
-            items(apps.filter { q.isBlank() || it.label.contains(q, true) }, key = { it.pkg }) { a ->
-                Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Column(Modifier.weight(1f)) { Text(a.label, color = TextP); Text(if (a.on) "Connected" else "Off", color = TextS, fontSize = 12.sp) }
-                    Switch(a.on, {
-                        vm.setApp(a.pkg, it); apps = vm.listedApps()
-                    }, colors = SwitchDefaults.colors(checkedTrackColor = Cyan))
+            items(
+                items = apps.filter { q.isBlank() || it.label.contains(q, true) },
+                key = { it.pkg }
+            ) { a ->
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text(a.label, color = TextP)
+                        Text(
+                            if (a.on) "Connected" else "Off",
+                            color = TextS,
+                            fontSize = 12.sp
+                        )
+                    }
+                    Switch(
+                        checked = a.on,
+                        onCheckedChange = {
+                            vm.setApp(a.pkg, it)
+                            apps = vm.listedApps()
+                        },
+                        colors = SwitchDefaults.colors(checkedTrackColor = Cyan)
+                    )
                 }
             }
         }
     }
 }
 
-@Composable fun MorePage(go: (String) -> Unit) {
+@Composable
+fun MorePage(go: (String) -> Unit, back: () -> Unit) {
+
     Column(Modifier.fillMaxSize().padding(16.dp)) {
         Text("More", color = TextP, fontWeight = FontWeight.Bold, fontSize = 24.sp)
         listOf("tasks" to "Tasks", "files" to "Files", "settings" to "Settings", "connect" to "Connect", "model" to "AI Model").forEach { (r, n) ->
