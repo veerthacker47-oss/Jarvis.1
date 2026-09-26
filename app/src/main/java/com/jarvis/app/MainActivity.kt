@@ -373,7 +373,9 @@ fun ModelPage(vm: JarvisVm, back: () -> Unit) {
         )
     }
 
-    val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+    val pick = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
         if (uri != null) {
             context.contentResolver.takePersistableUriPermission(
                 uri,
