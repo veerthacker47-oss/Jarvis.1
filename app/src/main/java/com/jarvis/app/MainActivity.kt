@@ -359,11 +359,11 @@ fun JarvisRoot(vm: JarvisVm) {
 
 @Composable fun ModelPage(vm: JarvisVm, back: () -> Unit) {
     val context = LocalContext.current
-    var status by remember { 
+    var status by remember {
         mutableStateOf(
-            if (vm.modelReady) "A GGUF is already installed." 
+            if (vm.modelReady) "A GGUF is already installed."
             else "No model yet. Import the .gguf from Downloads."
-        ) 
+        )
     }
 
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -390,6 +390,7 @@ fun JarvisRoot(vm: JarvisVm) {
         }
     }
 }
+
 
 
     Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
