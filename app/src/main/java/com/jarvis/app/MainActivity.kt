@@ -364,8 +364,11 @@ fun JarvisRoot(vm: JarvisVm) {
 }
 
 @Composable
-fun ModelPage(vm: JarvisVm, back: () -> Unit) {
-    val context = LocalContext.current
+fun ModelPage(
+    vm: JarvisVm,
+    back: () -> Unit,
+    context: Context = LocalContext.current
+) {
     var status by remember {
         mutableStateOf(
             if (vm.modelReady) "A GGUF is already installed."
@@ -399,6 +402,7 @@ fun ModelPage(vm: JarvisVm, back: () -> Unit) {
         }
     }
 }
+
 
 
 
