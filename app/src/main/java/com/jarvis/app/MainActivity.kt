@@ -527,6 +527,7 @@ data class ChatMessage(val text: String, val isUser: Boolean)
 fun ChatScreen(
     modifier: Modifier = Modifier
 ) {
+val context = LocalContext.current
     var inputText by remember { mutableStateOf("") }
     val messages = remember { mutableStateListOf<ChatMessage>() }
     val scope = rememberCoroutineScope()
