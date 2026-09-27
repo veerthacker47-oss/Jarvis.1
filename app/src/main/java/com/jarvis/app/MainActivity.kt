@@ -45,7 +45,7 @@ private val TextP = Color.White
 private val TextS = Color(0xFF94A3B8)
 private val TextT = Color(0xFF64748B)
 
-data class Msg(val id: String = UUID.randomUUID().toString(), val role: String, val text: String)
+data class Msg(val id: String = UUID.randomUUID().toString(), val role:  String, val text: String)
 data class TaskItem(val id: String = UUID.randomUUID().toString(), val title: String, val whenText: String, val done: Boolean = false)
 data class Mem(val id: String = UUID.randomUUID().toString(), val text: String)
 data class AppItem(val label: String, val pkg: String, val on: Boolean)
