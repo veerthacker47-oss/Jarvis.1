@@ -178,20 +178,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun JarvisRoot(vm: JarvisVm) {
     val nav = rememberNavController()
-    val route = nav.currentBackStackEntryAsState().value?.destination?.route ?: "chat"
+    val route = nav.currentBackStackEntryAsState().value?.destination?.route ?: "home"
     var voice by remember { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize().background(Bg)) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
-            NavHost(nav, startDestination = "chat") {
-                composable("chat") { ChatPage(vm) { nav.navigate("model") } }
-                composable("model") { ModelPage(vm) { nav.popBackStack() } }
-            }
-        }
-    }
-}
-
-            NavHost(nav, startDestination = "home", modifier = Modifier.weight(1f)) {
+            NavHost(
+                navController = nav,
+                startDestination = "home",
+                modifier = Modifier.weight(1f)
+            ) {
                 composable("home") { HomePage(vm, { nav.navigate(it) }, { voice = true }) }
                 composable("chat") { ChatPage(vm, { nav.popBackStack() }, { voice = true }) }
                 composable("memory") { MemoryPage(vm) { nav.popBackStack() } }
@@ -200,19 +196,40 @@ fun JarvisRoot(vm: JarvisVm) {
                 composable("files") { FilesPage { nav.popBackStack() } }
                 composable("settings") { SettingsPage(vm) { nav.navigate(it) } }
                 composable("connect") { ConnectPage(vm) { nav.popBackStack() } }
-                composable("model") { ModelPage(vm) { nav.popBackStack() } }
+                composable("model") { ModelPage(vm = vm, back = { nav.popBackStack() }) }
                 composable("more") { MorePage { nav.navigate(it) } }
             }
+
             if (route in setOf("home", "memory", "skills", "more")) {
-                Row(Modifier.fillMaxWidth().background(Color(0xFF0D1228)).padding(10.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
-                    listOf("home" to "Home", "memory" to "Memory", "skills" to "Skills", "more" to "More").forEach { (r, l) ->
-                        Text(l, color = if (route == r) Cyan else TextS, fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.clickable { nav.navigate(r) { launchSingleTop = true } })
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(Color(0xFF0D1228))
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    listOf(
+                        "home" to "Home",
+                        "memory" to "Memory",
+                        "skills" to "Skills",
+                        "more" to "More"
+                    ).forEach { (r, l) ->
+                        Text(
+                            l,
+                            color = if (route == r) Cyan else TextS,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.clickable {
+                                nav.navigate(r) { launchSingleTop = true }
+                            }
+                        )
                     }
                 }
             }
         }
-        if (voice) VoicePage(vm, { voice = false })
+
+        if (voice) {
+            VoicePage(vm) { voice = false }
+        }
     }
 }
 
