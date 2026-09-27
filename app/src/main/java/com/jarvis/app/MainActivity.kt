@@ -190,7 +190,7 @@ val route = currentEntry.value?.destination?.route ?: "home"
                 startDestination = "home",
                 modifier = Modifier.weight(1f)
             ) {
-                composable("home") { HomePage(vm = vm, go = { route: String -> nav.navigate(route) }, talk = { voice = true }) }
+                composable("home") { HomePage(vm = vm, go = { dest -> nav.navigate(dest) }, talk = { voice = true }) }
                 composable("chat") { ChatPage(vm, { nav.popBackStack() }, { voice = true }) }
                 composable("memory") { MemoryPage(vm) { nav.popBackStack() } }
                 composable("skills") { SkillsPage { nav.popBackStack() } }
