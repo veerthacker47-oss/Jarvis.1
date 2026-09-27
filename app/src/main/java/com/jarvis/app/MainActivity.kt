@@ -626,4 +626,3 @@ AutomationManager(context).executeCommand(prompt)
     }
 }
 }
-
