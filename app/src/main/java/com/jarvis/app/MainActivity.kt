@@ -189,7 +189,7 @@ fun JarvisRoot(vm: JarvisVm) {
                 startDestination = "home",
                 modifier = Modifier.weight(1f)
             ) {
-                composable("home") { HomePage(vm, { nav.navigate(it) }, { voice = true }) }
+                composable("home") { HomePage(vm = vm, go = { nav.navigate(it) }, talk = { voice = true }) }
                 composable("chat") { ChatPage(vm, { nav.popBackStack() }, { voice = true }) }
                 composable("memory") { MemoryPage(vm) { nav.popBackStack() } }
                 composable("skills") { SkillsPage { nav.popBackStack() } }
