@@ -179,8 +179,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun JarvisRoot(vm: JarvisVm) {
     val nav = rememberNavController()
-    val navBackStackEntry by nav.currentBackStackEntryAsState()
-val route = navBackStackEntry?.destination?.route ?: "home"
+    val currentEntry = nav.currentBackStackEntryAsState()
+val route = currentEntry.value?.destination?.route ?: "home"
     var voice by remember { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize().background(Bg)) {
