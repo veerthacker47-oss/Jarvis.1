@@ -179,7 +179,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun JarvisRoot(vm: JarvisVm) {
     val nav = rememberNavController()
-    val route = nav.currentBackStackEntryAsState().value?.destination?.route ?: "home"
+    val navBackStackEntry by nav.currentBackStackEntryAsState()
+val route = navBackStackEntry?.destination?.route ?: "home"
     var voice by remember { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize().background(Bg)) {
@@ -189,7 +190,7 @@ fun JarvisRoot(vm: JarvisVm) {
                 startDestination = "home",
                 modifier = Modifier.weight(1f)
             ) {
-                composable("home") { HomePage(vm = vm, go = { nav.navigate(it) }, talk = { voice = true }) }
+                composable("home") { HomePage(vm = vm, go = { route: String -> nav.navigate(route) }, talk = { voice = true }) }
                 composable("chat") { ChatPage(vm, { nav.popBackStack() }, { voice = true }) }
                 composable("memory") { MemoryPage(vm) { nav.popBackStack() } }
                 composable("skills") { SkillsPage { nav.popBackStack() } }
