@@ -180,7 +180,7 @@ class MainActivity : ComponentActivity() {
 fun JarvisRoot(vm: JarvisVm) {
     val nav = rememberNavController()
     val currentEntry = nav.currentBackStackEntryAsState()
-val route = currentEntry.value?.destination?.route ?: "home"
+    val route = currentEntry.value?.destination?.route ?: "home"
     var voice by remember { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize().background(Bg)) {
@@ -201,7 +201,6 @@ val route = currentEntry.value?.destination?.route ?: "home"
                 composable("model") { ModelPage(vm = vm, back = { nav.popBackStack() }) }
                 composable("more") { MorePage { nav.navigate(it) } }
             }
-
             if (route in setOf("home", "memory", "skills", "more")) {
                 Row(
                     Modifier
