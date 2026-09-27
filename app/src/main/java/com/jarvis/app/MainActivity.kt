@@ -220,7 +220,7 @@ fun JarvisRoot(vm: JarvisVm) {
                             color = if (route == r) Cyan else TextS,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.clickable {
-                                nav.navigate(r) { launchSingleTop = true }
+                                nav.navigate(r) 
                             }
                         )
                     }
