@@ -201,6 +201,7 @@ fun JarvisRoot(vm: JarvisVm) {
                 composable("model") { ModelPage(vm = vm, back = { nav.popBackStack() }) }
                 composable("more") { MorePage { nav.navigate(it) } }
             }
+
             if (route in setOf("home", "memory", "skills", "more")) {
                 Row(
                     Modifier
